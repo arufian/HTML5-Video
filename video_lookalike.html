@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+<meta name="viewport" content="initial-scale=1.0">
+
+<script>
+
+var audio1 = function() {
+
+	var audioku = document.getElementById("audioku");
+	setTimeout(function() {
+			audioku.load();
+			setTimeout(function() {
+				audioku.play();
+				audioku.addEventListener('ended',function(){
+						audioku.play();
+				  },false);
+			}, 100);
+		}, 100);
+		
+	
+	var gambarku = document.getElementById("gambarku");
+	var x = 1;
+	var y = 0;
+	var initx=-1200;
+	var inity=0;
+	var intku=self.setInterval(function() {
+		var posx = initx+(x*240);
+		var posy = inity+(y*136);
+		if(x==9 && y==3){
+			x=0;y=0;
+		}
+		if(x==9){
+			y++;
+			x=0;
+		}
+		x++;
+		gambarku.style.backgroundPosition = posx+"px "+posy+"px";
+	}, 100);
+
+};
+
+window.onload = audio1;
+
+</script>
+
+<title>video like page</title>
+
+</head>
+
+<body>
+<audio controls="controls" id="audioku" style="display:none">
+  <source src="resource/audio.mp3" type="audio/mp3" />
+  Your browser does not support the audio element.
+</audio>
+<div id="gambarku"
+style="width: 240px; height: 136px; position: relative; top: -0.5px; left: 40px; background-image: url(resource/final.4.jpg); background-position: -1200px 0px;"></div>
+</body>
+
+</html>

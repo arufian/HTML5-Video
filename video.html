@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+	var browserDetection  = {
+		start : function(){
+			var theVideo=document.getElementById('video_id');
+			var videoSource=document.createElement('source');
+			if(navigator.userAgent.toLowerCase().search("android") > -1){
+				videoSource.setAttribute('src', 'http://www.w3schools.com/html5/movie.mp4');
+				videoSource.setAttribute('type', 'application/x-shockwave-flash');
+				browserDetection.browser = "android";
+			} else if(navigator.userAgent.toLowerCase().search("iphone") > -1){
+				videoSource.setAttribute('src', 'http://www.w3schools.com/html5/movie.mp4');
+				videoSource.setAttribute('type', 'video/mp4');
+				browserDetection.browser = "iphone";
+			} else{ 
+				videoSource.setAttribute('src', 'http://www.w3schools.com/html5/movie.mp4');
+				videoSource.setAttribute('type', 'video/mp4');
+				browserDetection.browser = "iphone";
+			}
+			theVideo.appendChild(videoSource);
+			browserDetection.prepareVideo();
+		}, 
+		prepareVideo : function(){
+			var theVideo=document.getElementById('video_id');
+			if(browserDetection.browser == "iphone"){
+				theVideo.addEventListener('click',function(){
+					theVideo.play();
+				  },false);
+				theVideo.addEventListener('ended',function(){
+					if(!browserDetection.isSeeking){
+						browserDetection.goBack(browserDetection.isValid);
+					}
+				  },false);
+				theVideo.addEventListener('seeking',function(){
+					browserDetection.isSeeking = true;
+					browserDetection.isValid = false;
+					var warning = document.getElementById("warning");
+					warning.style.display = "block";
+					theVideo.stop();
+				  },false);
+			}
+		},
+		goBack : function(isValid){
+			if(isValid){
+				var callbackUrl = browserDetection.getParam("callback_url");
+				window.location.href = callbackUrl;
+			}
+		},
+		getParam : function(name){
+		  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+		  var regexS = "[\\?&]" + name + "=([^&#]*)";
+		  var regex = new RegExp(regexS);
+		  var results = regex.exec(window.location.href);
+		  if(results == null)
+		    return "";
+		  else
+		    return decodeURIComponent(results[1].replace(/\+/g, " "));
+		},
+		browser : "",
+		isValid : true,
+		isSeeking : false,
+	};
+	window.onload = browserDetection.start;
+</script>
+</head>
+<body>
+<video width="320" height="240" id="video_id" style="cursor: pointer;" poster="http://www.808.dk/pics/video/gizmo.jpg" control="false">
+</video>
+<div id="warning" style="display: none;" >Don't try to seeking</div>
+</body>
+</html>
